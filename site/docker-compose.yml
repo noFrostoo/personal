@@ -5,8 +5,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.site.rule=Host(`${DOMAIN:-lipniacki.sh}`)"
-      - "traefik.http.routers.site.service=site"
+      - "traefik.http.routers.site.rule=Host(`${DOMAIN:-lipniacki.sh}`) || Host(`www.${DOMAIN:-lipniacki.sh}`)"
       - "traefik.http.routers.site.entrypoints=websecure"
       - "traefik.http.routers.site.tls=true"
       - "traefik.http.routers.site.tls.certresolver=sslresolver"
