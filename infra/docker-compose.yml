@@ -21,7 +21,7 @@ services:
       - --certificatesresolvers.sslresolver.acme.dnschallenge=true
       - --certificatesresolvers.sslresolver.acme.dnschallenge.provider=cloudflare
   
-    ports:l
+    ports:
       - "80:80"
       - "443:443"
     environment:
