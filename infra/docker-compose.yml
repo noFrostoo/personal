@@ -1,0 +1,38 @@
+services:
+  traefik:
+    image: traefik:v3.5.1
+    container_name: traefik
+    restart: unless-stopped
+    command:
+      - --api.dashboard=false
+      - --api.insecure=false
+      - --providers.docker=true
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.network=traefik
+      
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.web.http.redirections.entrypoint.permanent=true
+      
+      - --certificatesresolvers.sslresolver.acme.email=${EMAIL}
+      - --certificatesresolvers.sslresolver.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.sslresolver.acme.dnschallenge=true
+      - --certificatesresolvers.sslresolver.acme.dnschallenge.provider=cloudflare
+  
+    ports:l
+      - "80:80"
+      - "443:443"
+    environment:
+      - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
+      - CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letsencrypt:/letsencrypt
+    networks:
+      - traefik
+
+
+networks:
+  traefik:
