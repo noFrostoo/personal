@@ -4,7 +4,6 @@ services:
     container_name: nextcloud-aio-mastercontainer
     restart: unless-stopped
     init: true
-    labels:
     environment:
       - APACHE_PORT=11000
       - APACHE_IP_BINDING=0.0.0.0
