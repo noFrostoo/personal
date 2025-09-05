@@ -8,10 +8,17 @@ services:
     environment:
       - APACHE_PORT=11000
       - APACHE_IP_BINDING=0.0.0.0
+      - APACHE_ADDITIONAL_NETWORK=traefik
       - SKIP_DOMAIN_VALIDATION=false
     volumes:
       - nextcloud_aio_mastercontainer:/mnt/docker-aio-config
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
 
 volumes:
   nextcloud_aio_mastercontainer:
