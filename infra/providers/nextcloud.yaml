@@ -1,7 +1,7 @@
 http:
   routers:
     nextcloud:
-      rule: "Host(nc.lipniacki.sh)"
+      rule: "Host(`nc.lipniacki.sh`)"
       entrypoints:
         - "websecure"
       service: nextcloud
