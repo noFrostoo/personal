@@ -1,0 +1,23 @@
+services:
+  nextcloud:
+    image: ghcr.io/nextcloud-releases/all-in-one:latest
+    container_name: nextcloud
+    restart: unless-stopped
+    init: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud.rule=Host(`${DOMAIN:-nc.lipniacki.sh}`) || Host(`www.${DOMAIN:-nc.lipniacki.sh}`)"
+      - "traefik.http.routers.nextcloud.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud.tls=true"
+      - "traefik.http.routers.nextcloud.tls.certresolver=sslresolver"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.nextcloudHeaders.headers.hostsProxyHeaders=X-Forwarded-Host"
+      - "traefik.http.middlewares.nextcloudHeaders.headers.referrerPolicy=same-origin"
+      - "traefik.http.routers.nextcloud.middlewares=nextcloudHeaders"
+    environment:
+      - APACHE_PORT=11000
+      - APACHE_IP_BINDING=0.0.0.0
+      - SKIP_DOMAIN_VALIDATION=false
+    volumes:
+      - ./data:/mnt/docker-aio-config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
