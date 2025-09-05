@@ -20,7 +20,9 @@ services:
       - --certificatesresolvers.sslresolver.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.sslresolver.acme.dnschallenge=true
       - --certificatesresolvers.sslresolver.acme.dnschallenge.provider=cloudflare
-  
+      
+      - --providers.file.directory=/etc/traefik/providers/
+      - --providers.file.watch=true
     ports:
       - "80:80"
       - "443:443"
@@ -28,6 +30,7 @@ services:
       - CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}
       - CLOUDFLARE_DNS_API_TOKEN=${CLOUDFLARE_API_KEY}
     volumes:
+      - ./providers:/etc/traefik/providers
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./letsencrypt:/letsencrypt
     networks:
